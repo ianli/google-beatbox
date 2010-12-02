@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+ * BeatBox design
+ * http://ianli.com/beatbox/
+ *
+ * Copyright 2010, Ian Li (http://ianli.com)
+ * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
+-->
+<html>
+<head>
+	<title>Google Beatbox</title>
+	
+	<!-- Blueprint CSS -->
+	<link rel="stylesheet" href="css/cw15gw05cc48/screen.css" type="text/css" media="screen, projection">
+	<!--[if IE]><link rel="stylesheet" href="css/cw15gw05cc48/ie.css" type="text/css" media="screen, projection"><![endif]-->
+	
+	<link rel="stylesheet" href="css/beatbox.css" type="text/css" media="screen,projection" />
+</head>
+<body>
+
+<div class="container">
+	
+<div class="bleed" id="hd">
+	<div class="span-24">
+		<a name="about"></a>
+		<h1>BeatBox with Google Translate</h1>
+		<img src="img/logo.png" alt="BeatBox with Google Translate" title="BeatBox with Google Translate" width="228" height="19" />
+		&nbsp;<sup id="version"></sup>
+	</div>
+	<div class="span-24 last" style="text-align:right;">
+		by <a href="http://ianli.com" target="_new">Ian Li</a>
+	</div>
+</div>
+<div id="controls" class="bleed">
+	<div class="span-48">
+		<div class="span-3"><a href="#" beat="zk">zk <small>suspended cymbal</small></a></div>
+		<div class="span-3"><a href="#" beat="bschk">bschk <small>snare</small></a></div>
+		<div class="span-3"><a href="#" beat="pv">pv <small>brush</small></a></div>
+		<div class="span-3"><a href="#" beat="bk">bk <small>bass</small></a></div>
+		<div class="span-3"><a href="#" beat="tk">tk <small>flam I</small></a></div>
+		<div class="span-3"><a href="#" beat="vk">vk <small>roll tap</small></a></div>
+		<div class="span-3"><a href="#" beat="kt">kt <small>flam II</small></a></div>
+		<div class="span-3"><a href="#" beat="kttp">kttp <small>flam tap</small></a></div>
+		<div class="span-3"><a href="#" beat="krp">krp <small>hi hat tap</small></a></div>
+		<div class="span-3"><a href="#" beat="th">th <small>better hi hat</small></a></div>
+		<div class="prepend-9 span-3"><a class="pause" href="#" beat=" ">short <small>pause</small></a></div>
+		<div class="span-3"><a class="pause" href="#" beat=",">medium <small>pause</small></a></div>
+		<div class="span-3 last"><a class="pause" href="#" beat=".">long <small>pause</small></a></div>
+	</div>
+	<div id="composition">
+	</div>
+</div>
+<div class="spacer bleed">
+	<div class="span-48"></div>
+</div>
+<div id="google_bleed" class="bleed">
+	<div class="span-48">
+		<iframe name="google" id="google" src="http://translate.google.com/#de|de|" scrolling="no"></iframe>
+	</div>
+	<div class="span-46">
+		<input id="google_url" type="text" value="" />
+	</div>
+	<div class="span-2 last">
+		<a href="#" id="google_go" target="_new">&raquo;</a>
+	</div>
+</div>
+<div class="spacer bleed">
+	<div class="span-48"></div>
+</div>
+<div id="ft" class="bleed">
+	<div class="span-31">
+		<h2>About</h2>
+		<p>
+			This web page is inspired by
+			<a href="http://www.reddit.com/user/harrichr" target="_new">harrichr</a>'s
+			<a href="http://www.reddit.com/r/todayilearned/comments/ed39q/til_how_to_make_google_beatbox_for_you/" target="_new">Reddit post</a>
+			on using Google Translate to beatbox.
+			I got the notations for the beats from 
+			<a href="http://news.ycombinator.com/item?id=1952531" target="_new">iamdave's YCombinater post</a>. 
+		</p>
+		<p>
+			Implemented in HTML, CSS, and Javascript. 
+			Used the <a href="http://jquery.com" target="_new">jQuery</a> Javascript library. 
+			The fonts are Futura for the logo and Helvetica for the body. 
+			The layout is built on top of <a href="http://blueprintcss.org" target="_new">Blueprint CSS</a>.
+		</p>
+	</div>
+	<div class="prepend-2 span-15 last">
+		<h2>&nbsp;</h2>
+		<p>
+			Google Translate is a service of <a href="http://google.com/" target="_new">Google</a>.
+		</p>
+		<p>
+			&copy; 2010 by
+			<a href="http://ianli.com">Ian Li</a>.
+			<a href="http://www.opensource.org/licenses/mit-license.php">Licensed under the MIT license.</a>
+		</p>
+	</div>
+</div>
+<div id="remove">&times;</div>
+
+</div>
+
+<!-- Javascripts -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/beatbox.js"></script>
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		// The beats
+		var beats = new Beats("pv zk pv pv zk pv zk kz zk pv pv pv zk pv zk zk pzk pzk pv|zk|pv|zk|pv|zk k|k|k|k|k|k bsch");
+		
+		// HTML view of the beats composition.
+		var $composition = $("#composition");
+		
+		// HTML element that appears on top of the beats.
+		// When clicked, removes the element below it.
+		var $remove = $("#remove");
+		
+		// Google-related variables.
+		var googleUrl = "http://translate.google.com/#de|de|";
+		var $google = $("#google");
+		var $googleUrl = $("#google_url");
+		var $googleGo = $("#google_go");
+		
+		$("#version")
+			.html(Beats.versionString());
+		
+		/**
+		 * Updates the selected beat in the composition view.
+		 */
+		function updateSelected() {
+			var index = beats.selectedIndex();
+			if (index >= 0) {
+				var selected = $composition
+				 				.children("span")
+								.removeClass("selected")
+								.get(index);
+		
+				$(selected).addClass("selected");
+			}
+		}
+		
+		/**
+		 * Updates the views.
+		 */
+		function update() {
+			// Update composition.
+			$composition.empty();
+			beats.each(function(i, beat) {
+				$span = $("<span></span>")
+					.html(beat)
+					.appendTo($composition)
+					.click(function() {
+						var index = $(this).index();
+						beats.select(index);
+					})
+					.hover(
+						// On mouseover...
+						function() {
+							var index = $(this).index();
+							$remove
+								.data("index", index)
+								.show()
+								.appendTo(this);
+						},
+						// On mouseout...
+						function() {
+							// Detach $remove, so that it stays when the comoposition is refreshed.
+							// Used .detach() so that events remain with the element.
+							$remove.detach();
+						}
+					);
+				
+				// Set the class if the beat is a pause.
+				if (beat === this.NO_PAUSE) {
+					$span.addClass("no_pause");
+				} else if (beat === this.SHORT_PAUSE) {
+					$span.addClass("short_pause");
+				} else if (beat === this.MEDIUM_PAUSE) {
+					$span.addClass("medium_pause");
+				} else if (beat === this.LONG_PAUSE) {
+					$span.addClass("long_pause");
+				} else {
+					// Beat is not a pause, do nothing.
+				}
+			});
+			
+			// Update selected.
+			updateSelected();
+			
+			// Update Google-related views.
+			var url = googleUrl + beats.toGoogle();
+			$google.attr("src", url);
+			$googleUrl.val(url);
+			$googleGo.attr("href", url);
+		}
+		
+		// Attach handlers to the Remove button.
+		$remove.click(function() {
+			// Detach $remove, so that it stays when the comoposition is refreshed.
+			// Used .detach() so that events remain with the element.
+			$(this).detach();
+			
+			var index = $(this).data("index");
+			beats.remove(index);
+		});
+		
+		// Attach handlers to the controls.
+		$("#controls a").click(function() {
+			// Get the beat.
+			var beat = $(this).attr("beat");
+			
+			beats.add(beat);
+
+			return false;
+		});
+		
+		// Attach handlers to events.
+		beats
+			.select(function() {
+				updateSelected();
+			})
+			.add(function() {
+				update();
+			})
+			.remove(function() {
+				update();
+			});
+
+		// Finally, call update to prepopulate the views.
+		update();
+	});
+	
+</script>
+
+<!-- Analytics -->
+<script type="text/javascript">
+	var sc_project=3249429; 
+	var sc_invisible=1; 
+	var sc_partition=35; 
+	var sc_security="8b3a3ada";
+	
+	$(document).ready(function() {
+		// StatCounter 
+		jQuery.getScript("http://www.statcounter.com/counter/counter_xhtml.js");
+		
+		// Google Analytics 
+		jQuery.getScript("http://www.google-analytics.com/urchin.js", function() {
+			_uacct = 'UA-317324-1';
+			urchinTracker();
+		});
+	});
+</script>
+</body>
+</html>
