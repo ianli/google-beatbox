@@ -6,6 +6,8 @@
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
  *
  * Versions:
+ * 0.3	2010-12-02
+ * - Added clear()
  * 0.2	2010-12-02
  * - Fixed problem with IE not parsing pauses.
  * 0.1	2010-12-01
@@ -231,6 +233,20 @@
 			}
 			return this;
 		}
+		
+		/**
+		 * Clears the beats.
+		 * @param {Function} [fn]	Optional function to handle event when clear() is called.
+		 */
+		this.clear = function() {
+			if (arguments.length > 0 && typeof arguments[0] === 'function') {
+				addEvent("clear", arguments[0]);
+			} else {
+				selected_index = -1;
+				beats = [];
+				fireEvent("clear");
+			}
+		}
 
 		/**
 		 * Selects the beat at index.
@@ -345,7 +361,7 @@
 	/* Current version of Beats */
 	Beats.VERSION = {
 		major: "0",
-		minor: "2"
+		minor: "3"
 	};
 	/* Version string */
 	Beats.versionString = function() {

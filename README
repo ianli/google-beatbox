@@ -5,6 +5,8 @@ Copyright 2010, Ian Li (http://ianli.com)
 Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
 
 Versions:
+0.3	2010-12-02
+- Added clear()
 0.2	2010-12-02
 - Fixed problem with IE not parsing pauses.
 0.1	2010-12-01

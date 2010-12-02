@@ -36,16 +36,16 @@ h2 {
 		color:#444;
 	}
 /* Controls */
-#controls {
+#ui_bleed {
 }
-#controls a {
+#ui_bleed a {
 	display:block;
 	padding:10px 0;
 	text-align:center;
 	text-decoration:none;
 	font-weight:bold;
 }
-	#controls a small {
+	#ui_bleed a small {
 		display:block;
 		clear:both;
 		font-weight:normal;
@@ -158,10 +158,10 @@ a:hover {
 #hd {
 	background-color:#111;
 }
-#controls {
+#ui_bleed {
 	background-color:#222;
 }
-	#controls a {
+	#ui_bleed a {
 		line-height:1em;
 		color:#777;
 		background-color:#333;
@@ -169,9 +169,13 @@ a:hover {
 		border-top:none;
 		border-left:none;
 	}
-	#controls a:hover {
+	#ui_bleed a:hover {
 		color:#000;
 		background-color:#f60;
+	}
+	#ui_bleed a.action {
+		color:#888;
+		background-color:#444;
 	}
 #composition_bleed {
 	background-color:#333;
