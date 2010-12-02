@@ -1,0 +1,208 @@
+/**
+ * BeatBox design
+ * http://ianli.com/beatbox/
+ * 
+ * Copyright 2010, Ian Li (http://ianli.com)
+ * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
+ */
+.bleed {
+	float:left;
+	margin-top:0;
+	margin-left:-10px;
+	margin-right:-10px;
+	padding:10px;
+}
+.spacer {
+	height:0px;
+	background:url(../img/vstripe_3x3.png) top -2px repeat;
+}
+p:last-child {
+	margin-bottom:0;	
+}
+h2 {
+	font-size:13px;
+	font-weight:bold;
+}
+/* Header */
+#hd {
+	padding:25px 10px 5px;
+	height:20px;
+	font-size:11px;
+}
+	#hd h1 {
+		display:none;
+	}
+	#hd #version {
+		color:#444;
+	}
+/* Controls */
+#controls {
+}
+#controls a {
+	display:block;
+	padding:10px 0;
+	text-align:center;
+	text-decoration:none;
+	font-weight:bold;
+}
+	#controls a small {
+		display:block;
+		clear:both;
+		font-weight:normal;
+	}
+/* Composition */
+#composition {
+	float:left;
+	min-height:25px;
+	width:947px;	/* 947 + padding = 955px */
+	margin-top:10px;
+	padding:4px 3px 3px 4px;
+	background-color:#333;
+}
+	#composition span {
+		position:relative;
+		display:block;
+		float:left;
+		margin:0 1px 1px 0;
+		padding:2px 4px;
+		height:20px;
+		font-size:11px;
+		cursor:pointer;
+	}
+	#composition span.no_pause,
+	#composition span.short_pause,
+	#composition span.medium_pause,
+	#composition span.long_pause {
+		padding-left:0;
+		padding-right:0;
+	}
+	#composition span.no_pause {
+		width:0;
+		display:none;
+	}
+	#composition span.short_pause {
+		width:9px;
+	}
+	#composition span.medium_pause {
+		width:27px;
+	}
+	#composition span.long_pause {
+		width:64px;
+	}
+/* Remove */
+#remove {
+	position:absolute;
+	display:none;
+	z-index:100;
+	top:-10px;
+	right:-5px;
+	width:15px;
+	height:15px;
+	line-height:14px;
+	font-size:14px;
+	text-align:center;
+	cursor:pointer;
+}
+/* Google iFrame */
+#google {
+	width:100%;
+	height:350px;
+	border:none;
+	overflow:hidden;
+}
+#google_url {
+	margin:0;
+	padding:5px;
+	width:905px;
+	height:20px;
+	border:none;
+	background-color:#666;
+	outline:none;
+}
+#google_go {
+	display:block;
+	height:30px;
+	color:#777;
+	background-color:#555;
+	text-align:center;
+	font-size:32px;
+	line-height:0.8em;
+	border:2px solid #333;
+	border-width:0 2px 2px 0;
+	text-decoration:none;
+}
+	#google_go:hover {
+		color:#000;
+		background-color:#f60;
+	}
+
+/******************
+ ***** Colors *****
+ ******************/
+html, body {
+	color:#555;
+	background-color:#111;
+}
+h2 {
+	color:#555;
+}
+a:link,
+a:visited {
+	color:#666;
+}
+a:hover {
+	color:#f90;
+}
+.container {
+}
+#hd {
+	background-color:#111;
+}
+#controls {
+	background-color:#222;
+}
+	#controls a {
+		line-height:1em;
+		color:#777;
+		background-color:#333;
+		border:2px solid #111;
+		border-top:none;
+		border-left:none;
+	}
+	#controls a:hover {
+		color:#000;
+		background-color:#f60;
+	}
+#composition_bleed {
+	background-color:#333;
+}
+#composition span {
+	color:#999;
+	background-color:#555;
+}
+	#composition span.no_pause,
+	#composition span.short_pause,
+	#composition span.medium_pause,
+	#composition span.long_pause {
+		color:#4a4a4a;
+		background-color:#4a4a4a;
+	}
+	#composition span.selected,
+	#composition span:hover {
+		color:#000;
+		background-color:#f60;
+	}
+#remove {
+	color:#000;
+	background-color:#ccc;
+}
+	#remove:hover {
+		background-color:#f60;
+	}
+#google_bleed {
+	background-color:#444;
+}
+#ft {
+	color:#555;
+	background-color:#222;
+}
