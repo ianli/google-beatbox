@@ -6,6 +6,8 @@
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
  *
  * Versions:
+ * 0.4	2010-12-02
+ * - Limit googleLength() to 100.
  * 0.3	2010-12-02
  * - Added clear()
  * 0.2	2010-12-02
@@ -30,10 +32,10 @@
 		var self = this;
 
 		/* The set of pauses */
-		var NO_PAUSE = this.NO_PAUSE = "|";
-		var SHORT_PAUSE = this.SHORT_PAUSE = " ";
-		var MEDIUM_PAUSE = this.MEDIUM_PAUSE = ",";
-		var LONG_PAUSE = this.LONG_PAUSE = ".";
+		var NO_PAUSE = Beats.NO_PAUSE;
+		var SHORT_PAUSE = Beats.SHORT_PAUSE;
+		var MEDIUM_PAUSE = Beats.MEDIUM_PAUSE;
+		var LONG_PAUSE = Beats.LONG_PAUSE;
 
 		/* Associative array of events */
 		var events = {};
@@ -180,12 +182,7 @@
 		 * Returns whether the beat is a pause.
 		 * @private
 		 */
-		var isPause = function(beat) {
-			return (beat == NO_PAUSE
-				|| beat == SHORT_PAUSE
-				|| beat == MEDIUM_PAUSE
-				|| beat == LONG_PAUSE);
-		}
+		var isPause = Beats.isPause;
 
 		/**
 		 * Adds the beat to the list of beats.
@@ -335,20 +332,9 @@
 		this.googleLength = function() {
 			var sum = 0;
 			this.each(function(i, beat) {
-				if (isPause(beat)) {
-					if (beat == NO_PAUSE) {
-						// do nothing.
-					} else if (beat == SHORT_PAUSE) {
-						sum += 1;
-					} else {
-						// beat == MEDIUM_PAUSE
-						// beat == LONG_PAUSE
-						sum += 2;
-					}
-				} else {
-					sum += beat.length;
-				}
+				sum += Beats.googleLength(beat);
 			});
+			return sum;
 		}
 
 		// Call setup
@@ -358,11 +344,48 @@
 			setup("");
 		}
 	}
+	Beats.NO_PAUSE = "|";
+	Beats.SHORT_PAUSE = " ";
+	Beats.MEDIUM_PAUSE = ",";
+	Beats.LONG_PAUSE = ".";
+	
+	/**
+	 * Returns whether the beat is a pause.
+	 */
+	Beats.isPause = function(beat) {
+		return (beat == Beats.NO_PAUSE
+			|| beat == Beats.SHORT_PAUSE
+			|| beat == Beats.MEDIUM_PAUSE
+			|| beat == Beats.LONG_PAUSE);
+	}
+	
+	/**
+	 * Returns the length of the beat when entered into Google Translate.
+	 * @param {String}	The beat
+	 * @returns {Number}	The length of the beat
+	 */
+	Beats.googleLength = function(beat) {
+		if (Beats.isPause(beat)) {
+			if (beat == Beats.NO_PAUSE) {
+				return 0;
+			} else if (beat == Beats.SHORT_PAUSE) {
+				return 1;
+			} else {
+				// beat == Beats.MEDIUM_PAUSE
+				// beat == Beats.LONG_PAUSE
+				return 2;
+			}
+		} else {
+			return beat.length;
+		}
+	}
+	
 	/* Current version of Beats */
 	Beats.VERSION = {
 		major: "0",
-		minor: "3"
+		minor: "4"
 	};
+	
 	/* Version string */
 	Beats.versionString = function() {
 		return Beats.VERSION.major + "." + Beats.VERSION.minor;

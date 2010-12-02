@@ -179,13 +179,13 @@
 					);
 				
 				// Set the class if the beat is a pause.
-				if (beat === this.NO_PAUSE) {
+				if (beat === Beats.NO_PAUSE) {
 					$span.addClass("no_pause");
-				} else if (beat === this.SHORT_PAUSE) {
+				} else if (beat === Beats.SHORT_PAUSE) {
 					$span.addClass("short_pause");
-				} else if (beat === this.MEDIUM_PAUSE) {
+				} else if (beat === Beats.MEDIUM_PAUSE) {
 					$span.addClass("medium_pause");
-				} else if (beat === this.LONG_PAUSE) {
+				} else if (beat === Beats.LONG_PAUSE) {
 					$span.addClass("long_pause");
 				} else {
 					// Beat is not a pause, do nothing.
@@ -212,6 +212,7 @@
 			beats.remove(index);
 		});
 		
+		// Attach a handler to the New button.
 		$("#new_beats").click(function() {
 			if (confirm("This will clear all the beats. Do you want to continue?")) {
 				beats.clear();
@@ -223,12 +224,18 @@
 			// Get the beat.
 			var beat = $(this).attr("beat");
 			
-			beats.add(beat);
+			// Limit Google length of beats to 100.
+			var l = beats.googleLength() + Beats.googleLength(beat);
+			if (l >= 100) {
+				alert("Too long. Google Translate will not translate text more than 100 characters.");
+			} else {
+				beats.add(beat);
+			}
 
 			return false;
 		});
 		
-		// Attach handlers to events.
+		// Attach handlers to Beats events.
 		beats
 			.select(function() {
 				updateSelected();
