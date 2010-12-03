@@ -32,9 +32,6 @@ h2 {
 	#hd h1 {
 		display:none;
 	}
-	#hd #version {
-		color:#444;
-	}
 /* Controls */
 #ui_bleed {
 }
@@ -94,8 +91,8 @@ h2 {
 	position:absolute;
 	display:none;
 	z-index:100;
-	top:-10px;
-	right:-5px;
+	top:-12px;
+	right:-3px;
 	width:15px;
 	height:15px;
 	line-height:14px;

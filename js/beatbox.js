@@ -6,6 +6,8 @@
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php).
  *
  * Versions:
+ * 0.5 2010-12-03
+ * - Added sound when clicking on controls.
  * 0.4	2010-12-02
  * - Limit googleLength() to 100.
  * 0.3	2010-12-02
@@ -22,6 +24,22 @@
 
 	// Establish the root object, `window` in the browser, or `global` on the server.
 	var root = this;
+	
+	// The namespace of BeatBox
+	var bb = {};
+	
+	// Export BeatBox to the global scope.
+	root.bb = bb;
+	
+	/* Current version of Beats */
+	bb.VERSION = {
+		major: "0",
+		minor: "5"
+	};
+	
+	/* Version string */
+	bb.VERSION_STRING = bb.VERSION.major + "." + bb.VERSION.minor;
+	
 
 	/**
 	 * The class representing the set of beats.
@@ -64,15 +82,6 @@
 		 * @private
 		 */
 		var setupFromString = function(str) {
-			/*
-			var tokens = str.split(" ");
-			// var tokens = str.split(/(\s+|\s*,\s*|\s*\|\s*)/ig);
-			for (var i = 0, n = tokens.length; i < n; i++) {
-				var token = tokens[i];
-				self.add(token);
-				// beats.push(token);
-			}
-			*/
 			split(str, SHORT_PAUSE);
 		}
 
@@ -344,6 +353,8 @@
 			setup("");
 		}
 	}
+	
+	/* The set of pauses */
 	Beats.NO_PAUSE = "|";
 	Beats.SHORT_PAUSE = " ";
 	Beats.MEDIUM_PAUSE = ",";
@@ -380,17 +391,44 @@
 		}
 	}
 	
-	/* Current version of Beats */
-	Beats.VERSION = {
-		major: "0",
-		minor: "4"
-	};
 	
-	/* Version string */
-	Beats.versionString = function() {
-		return Beats.VERSION.major + "." + Beats.VERSION.minor;
+	/**
+	 * Plays beats.
+	 * @param {Object}	map	An object with beats as the keys, e.g., "pv"
+	 *						and file locations as values.
+	 *						File locations do not include the extension, e.g., 
+	 *						"audios/pv.mp3" is just "audios/pv"
+	 *						This assumes that MP3 and OGG versions of the files are available.
+	 * @class
+	 */
+	var Player = function(map) {
+		var self = this;
+		
+		var audios = {};
+		
+		if (typeof Modernizr !== 'undefined' && Modernizr.audio) {
+			var extension = null;
+			if (Modernizr.audio.mp3) {
+				extension = ".mp3";
+			} else if (Modernizr.audio.ogg) {
+				extension = ".ogg";
+			}
+			
+			if (extension) {
+				for (var i in map) {
+					audios[i] = new Audio(map[i] + extension);
+				}
+			}
+		}
+		
+		this.play = function(beat) {			
+			if (typeof audios[beat] !== 'undefined') {
+				audios[beat].play();
+			}
+		}
 	}
 
-	// Expose Beats to the global scope.
-	root.Beats = Beats;
+	// Attach the classes to the bb namespace.
+	bb.Beats = Beats;
+	bb.Player = Player;
 })();

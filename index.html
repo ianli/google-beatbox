@@ -22,21 +22,20 @@
 	
 <div class="bleed" id="hd">
 	<div class="span-24">
-		<a name="about"></a>
 		<h1>BeatBox with Google Translate</h1>
-		<img src="img/logo.png" alt="BeatBox with Google Translate" title="BeatBox with Google Translate" width="228" height="19" />
-		&nbsp;<sup id="version"></sup>
+		<img src="img/logo.png" alt="BeatBox with Google Translate" title="BeatBox with Google Translate" width="228" height="19" style="float:left" />
+		&nbsp;<sup id="version">0.0</sup>
 	</div>
-	<div class="span-24 last" style="text-align:right;">
-		by <a href="http://ianli.com" target="_new">Ian Li</a>
+	<div class="span-24 last" style="text-align:right">
+		&nbsp;by <a href="http://ianli.com" target="_new">Ian Li</a>
 	</div>
 </div>
 <div id="ui_bleed" class="bleed">
 	<div class="span-3">
 		<a id="new_beats" class="action" href="#">NEW <small>beats</small></a>
 	</div>
-	<div id="controls" class="prepend-3 span-42 last">
-		<div class="span-3"><a href="#" beat="zk">zk <small>suspended cymbal</small></a></div>
+	<div id="controls" class="prepend-2 span-43 last">
+		<div class="span-3"><a href="#" beat="zk" style="padding:4px 0;">zk <small>suspended cymbal</small></a></div>
 		<div class="span-3"><a href="#" beat="bschk">bschk <small>snare</small></a></div>
 		<div class="span-3"><a href="#" beat="pv">pv <small>brush</small></a></div>
 		<div class="span-3"><a href="#" beat="bk">bk <small>bass</small></a></div>
@@ -46,7 +45,9 @@
 		<div class="span-3"><a href="#" beat="kttp">kttp <small>flam tap</small></a></div>
 		<div class="span-3"><a href="#" beat="krp">krp <small>hi hat tap</small></a></div>
 		<div class="span-3"><a href="#" beat="th">th <small>better hi hat</small></a></div>
-		<div class="prepend-3 span-3"><a class="pause" href="#" beat=" ">short <small>pause</small></a></div>
+		<div class="span-3"><a href="#" beat="kk" style="padding:16px 0;">kk</a></div>
+			
+		<div class="prepend-1 span-3"><a class="pause" href="#" beat=" ">short <small>pause</small></a></div>
 		<div class="span-3"><a class="pause" href="#" beat=",">medium <small>pause</small></a></div>
 		<div class="span-3 last"><a class="pause" href="#" beat=".">long <small>pause</small></a></div>
 	</div>
@@ -109,12 +110,28 @@
 
 <!-- Javascripts -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="js/modernizr-1.6.min.js"></script>
 <script type="text/javascript" src="js/beatbox.js"></script>
 <script type="text/javascript">
 	
 	$(document).ready(function() {
 		// The beats
-		var beats = new Beats("pv zk pv pv zk pv zk kz zk pv pv pv zk pv zk zk pzk pzk pv|zk|pv|zk|pv|zk k|k|k|k|k|k bsch");
+		var beats = new bb.Beats("pv zk pv pv zk pv zk kt zk pv pv pv zk pv zk zk pzk pzk pv|zk|pv|zk|pv|zk kk|kk|kk bschk");
+		
+		// BeatBox Player		
+		var player = new bb.Player({
+			zk: "audios/de_zk",
+			bschk: "audios/de_bschk",
+			pv: "audios/de_pv",
+			bk: "audios/de_bk",
+			tk: "audios/de_tk",
+			vk: "audios/de_vk",
+			kt: "audios/de_kt",
+			kttp: "audios/de_kttp",
+			krp: "audios/de_krp",
+			th: "audios/de_th",
+			kk: "audios/de_kk",
+		});
 		
 		// HTML view of the beats composition.
 		var $composition = $("#composition");
@@ -128,9 +145,6 @@
 		var $google = $("#google");
 		var $googleUrl = $("#google_url");
 		var $googleGo = $("#google_go");
-		
-		$("#version")
-			.html(Beats.versionString());
 		
 		/**
 		 * Updates the selected beat in the composition view.
@@ -156,10 +170,13 @@
 			beats.each(function(i, beat) {
 				$span = $("<span></span>")
 					.html(beat)
+					.attr("beat", beat)
 					.appendTo($composition)
 					.click(function() {
 						var index = $(this).index();
 						beats.select(index);
+						
+						player.play(beat);
 					})
 					.hover(
 						// On mouseover...
@@ -179,13 +196,13 @@
 					);
 				
 				// Set the class if the beat is a pause.
-				if (beat === Beats.NO_PAUSE) {
+				if (beat === bb.Beats.NO_PAUSE) {
 					$span.addClass("no_pause");
-				} else if (beat === Beats.SHORT_PAUSE) {
+				} else if (beat === bb.Beats.SHORT_PAUSE) {
 					$span.addClass("short_pause");
-				} else if (beat === Beats.MEDIUM_PAUSE) {
+				} else if (beat === bb.Beats.MEDIUM_PAUSE) {
 					$span.addClass("medium_pause");
-				} else if (beat === Beats.LONG_PAUSE) {
+				} else if (beat === bb.Beats.LONG_PAUSE) {
 					$span.addClass("long_pause");
 				} else {
 					// Beat is not a pause, do nothing.
@@ -225,12 +242,15 @@
 			var beat = $(this).attr("beat");
 			
 			// Limit Google length of beats to 100.
-			var l = beats.googleLength() + Beats.googleLength(beat);
+			var l = beats.googleLength() + bb.Beats.googleLength(beat);
 			if (l >= 100) {
 				alert("Too long. Google Translate will not translate text more than 100 characters.");
 			} else {
 				beats.add(beat);
 			}
+			
+			// Play the beat.
+			player.play(beat);
 
 			return false;
 		});
@@ -240,15 +260,19 @@
 			.select(function() {
 				updateSelected();
 			})
-			.add(function() {
+			.remove(function() {
 				update();
 			})
-			.remove(function() {
+			.add(function() {
 				update();
 			})
 			.clear(function() {
 				update();
 			});
+		
+		// Show the version.
+		$("#version")
+			.html(bb.VERSION_STRING);
 
 		// Finally, call update to prepopulate the views.
 		update();
