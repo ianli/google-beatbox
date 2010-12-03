@@ -14,7 +14,7 @@
 }
 .spacer {
 	height:0px;
-	background:url(../img/vstripe_3x3.png) top left repeat; /* top -2px repeat; */
+	background:url(../img/vstripe_3x3.png) top left repeat;
 }
 p:last-child {
 	margin-bottom:0;	
